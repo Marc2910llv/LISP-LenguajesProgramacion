@@ -1,8 +1,18 @@
 ;; FUNCIONS
 
 ;; Guardar dins les propietats d'un àtom simbòlic "spiro" informació per inicialitzar el nostre spirograph
-(defun guarda-informacio ()
-
+(defun guarda-informacio (g p rg rp pu in esc int xco yco pa)
+    (putprop spiro g grans)
+    (putprop spiro p petits)
+    (putprop spiro rg rgran)
+    (putprop spiro rp rpetit)
+    (putprop spiro pu punt)
+    (putprop spiro in inici)
+    (putprop spiro esc escala)
+    (putprop spiro int interior)
+    (putprop spiro xco x)
+    (putprop spiro yco y)
+    (putprop spiro pa pas)
 )
 
 ;; Colors de la tinta
@@ -29,7 +39,7 @@
 
 ;; Convertir graus a radians
 (defun radians (g)
-
+    (/ (* g pi) 180)
 )
 
 ;; Posar r com a nou valor de radi gran i pinta un cercle en la posició per defecte
