@@ -110,13 +110,38 @@
 )
 
 ;; Dibuixar cercle en el punt (x,y) de radi r i dividit en n segments
-(defun cercle (x y radi n)
+;;movem el llapiç a una posició per pintar
+(defun mou (x y)
+    (move (realpart (round (+ 320 (* (get 'spiro 'escala) x))))
+        (realpart (round (+ 187 (* (get 'spiro 'escala) y ))))
+    )
+)
 
+;; pintam fins a una posició x i y
+
+(defun pinta(x y)
+    (draw (realpart (round (+ 320 (* (get 'spiro 'escala) x))))
+        (realpart (round (+ 187 (* (get 'spiro 'escala) y))))
+    )
 )
 
 ;; Convertir graus a radians
 (defun radians (g)
     (/ (* g pi) 180)
+)
+
+(defun cercle2 (x y radi pas angle)
+    (cond ((< angle 360) (pinta (+ x (* radi (cos (radians (+ angle pas)))))  
+                                (+ y (* radi (sin (radians (+ angle pas)))))
+                                )
+                                (cercle2 x y radi pas (+ angle pas)))
+            (t t)
+    )
+)
+
+(defun cercle (x y radi n)
+    (mou (+ x radi) y)
+    (cercle2 x y radi (/ 360 n) 0)
 )
 
 ;; Posar r com a nou valor de radi gran i pinta un cercle en la posició per defecte
