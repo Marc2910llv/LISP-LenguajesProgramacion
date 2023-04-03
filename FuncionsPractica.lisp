@@ -146,34 +146,57 @@
 
 ;; Posar r com a nou valor de radi gran i pinta un cercle en la posició per defecte
 (defun radigran (r)
-
+    (putprop 'spiro r 'rgran)
 )
 
 ;; Posar r com a nou valor de radi petit i pinta un cercle en la posició per defecte
 (defun radipetit (r)
-
+    (putprop 'spiro r 'rpetit)
 )
 
 ;; Establir valoras per defecte a propietats de "spiro"
 (defun punt (p)
-
+    (putprop 'spiro p 'punt)
 )
 
 (defun inici (angle)
-
+    (putprop 'spiro angle 'inici)
 )
 
 (defun escala (e)
-
+    (putprop 'spiro e 'escala)
 )
 
 (defun posicio (x y)
-
+    (putprop 'spiro x 'x)
+    (putprop 'spiro y 'y)
 )
 
 ;; Calcular la fracció reduïda de m i n i retorna una llista amb els dos valors de la nova fracció
-(defun reduir (m n)
 
+;;primer necessitam quatre funcions adicionals, darrer, divisible, conjunt i divisor_comú
+(defun darrer (I) (car (reverse I)))
+
+(defun divisible (x y)
+    (cond ((eq (mod x y) 0) t)
+        (t nil)))
+
+(defun conjunt (x y)
+    (cond ((eq x y) (list x))
+        ((divisible x y) (append (list y) (conjunt x (+ y 1))))
+        (t (conjunt x (+ y 1)))))
+
+(defun divisor_comu (m n)
+    (cond ((null (car m)) nil)
+        ((eq (member (car m) n) nil) (divisor_comu (cdr m) n))
+        (t (cons (car m) (divisor_comu (cdr m) n)))))
+
+;;funció definitiva
+
+(defun reducir (x y)
+    (append (list (/ x (darrer (divisor_comu (conjunt x 1) (conjunt y 1)))))
+            (list (/ y (darrer (divisor_comu (conjunt x 1) (conjunt y 1)))))
+    )
 )
 
 ;; Simula el comportament d’un spirograph amb el número de passes p, amb els radis gran i 
