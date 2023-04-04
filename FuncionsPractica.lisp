@@ -90,7 +90,7 @@
     '(cercle1 cercle2 cercle3 cercle4 cercle5
      cercle6 cercle7 cercle8 cercle9 cercle10
      cercle11 cercle12 cercle13 cercle14 cercle15)
-    150 50 3 40 1.8 t 50 50 0.2)
+    150 50 3 40 1.8 t 0 0 0.2)
 
 ;; Colors de la tinta
 (defun vermell ()
@@ -147,11 +147,14 @@
 ;; Posar r com a nou valor de radi gran i pinta un cercle en la posició per defecte
 (defun radigran (r)
     (putprop 'spiro r 'rgran)
+    (cercle (get 'spiro 'x) (get 'spiro 'y) r 100)
+    
 )
 
 ;; Posar r com a nou valor de radi petit i pinta un cercle en la posició per defecte
 (defun radipetit (r)
     (putprop 'spiro r 'rpetit)
+    (cercle (* (- (get 'spiro 'rgran) r) (sin (radians (get 'spiro 'inici)))) (* (- (get 'spiro 'rgran) r) (cos (radians (get 'spiro 'inici)))) r 100)
 )
 
 ;; Establir valoras per defecte a propietats de "spiro"
