@@ -90,7 +90,7 @@
     '(cercle1 cercle2 cercle3 cercle4 cercle5
      cercle6 cercle7 cercle8 cercle9 cercle10
      cercle11 cercle12 cercle13 cercle14 cercle15)
-    150 50 3 40 1.8 t 0 0 0.2)
+    150 50 3 0 1.8 t 0 0 0.2)
 
 ;; Colors de la tinta
 (defun vermell ()
@@ -178,6 +178,7 @@
 ;; Calcular la fracció reduïda de m i n i retorna una llista amb els dos valors de la nova fracció
 
 ;;primer necessitam quatre funcions adicionals, darrer, divisible, conjunt i divisor_comú
+;;no fa falta tot això, ja hi ha una funció mcd definida dins lisp
 (defun darrer (I) (car (reverse I)))
 
 (defun divisible (x y)
@@ -205,8 +206,41 @@
 ;; Simula el comportament d’un spirograph amb el número de passes p, amb els radis gran i 
 ;; petit, amb la distancia t, un increment inc a cada passa i amb l’inici del 
 ;; dibuixat a l’angle donat en graus. 
-(defun spirograph (p gran petit d inc inici)
 
+;;formula 9 i 10 per x mirant la variable interior de spiro
+(defun funcio910x (angle d)
+   (cond ((eq (get 'spiro 'interior) t) 
+   (+ (* (- (get 'spiro 'rgran) (get 'spiro 'rpetit)) (cos (/ (* (get 'spiro 'rpetit) angle) (get 'spiro 'rgran))))
+   (* d (cos (* angle (- 1 (/ (get 'spiro 'rpetit) (get 'spiro 'rgran))))))))
+
+    (t (- (* (+ (get 'spiro 'rgran) (get 'spiro 'rpetit)) (cos (/ (* (get 'spiro 'rpetit) angle) (get 'spiro 'rgran))))
+            (* d (cos (* angle (+ 1 (/ (get 'spiro 'rpetit) (get 'spiro 'rpetit))))))))
+    )
+)
+;;funció que incrementa l'angle
+(defun incrementaangle (angle inc)
+    (cond ((>= (+ angle inc) 360) (- (+ angle inc) 360))
+        (t (+ angle inc))))
+
+;;formula 9 i 10 per y mirant la variable interior de spiro
+
+(defun funcio910y (angle d)
+   (cond ((eq (get 'spiro 'interior) t) 
+   (- (* (- (get 'spiro 'rgran) (get 'spiro 'rpetit)) (sin (/ (* (get 'spiro 'rpetit) angle) (get 'spiro 'rgran))))
+   (* d (sin (* angle (- 1 (/ (get 'spiro 'rpetit) (get 'spiro 'rgran))))))))
+
+    (t (- (* (+ (get 'spiro 'rgran) (get 'spiro 'rpetit)) (sin (/ (* (get 'spiro 'rpetit) angle) (get 'spiro 'rgran))))
+            (* d (sin (* angle (+ 1 (/ (get 'spiro 'rpetit) (get 'spiro 'rpetit))))))))
+    )
+)
+;;dibuixa l'spirograph
+(defun spirograph (p gran petit d inc inici)
+    (cond ((= p 0) (radigran gran)(radipetit petit)(inici inici)(posicio 0 0)(cls)(mou (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici))))
+                (+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici))))))
+
+        (t (spirograph (- p inc) gran petit d inc (incrementaangle inici inc)) (pinta (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici))))
+                (+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici)))))
+                ))
 )
 
 ;; Simula el comportament d’un spirograph amb el número de voltes necessàries per acabar tot el traçat
