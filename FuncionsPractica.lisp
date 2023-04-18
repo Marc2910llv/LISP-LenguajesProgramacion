@@ -238,7 +238,7 @@
     (cond ((= p 0) (radigran gran)(radipetit petit)(inici inici)(posicio 0 0)(cls)(mou (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici))))
                 (+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici))))))
 
-        (t (spirograph (- p inc) gran petit d inc (incrementaangle inici inc)) (pinta (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici))))
+        (t (spirograph (- p 1) gran petit d inc (incrementaangle inici inc)) (pinta (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici))))
                 (+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici)))))
                 ))
 )
