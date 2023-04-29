@@ -90,7 +90,7 @@
     '(cercle1 cercle2 cercle3 cercle4 cercle5
      cercle6 cercle7 cercle8 cercle9 cercle10
      cercle11 cercle12 cercle13 cercle14 cercle15)
-    150 50 3 0 1.8 t 0 0 0.2)
+    150 50 3 0 1.2 t 0 0 0.2)
 
 ;; Colors de la tinta
 (defun vermell ()
@@ -233,19 +233,47 @@
             (* d (sin (* angle (+ 1 (/ (get 'spiro 'rpetit) (get 'spiro 'rpetit))))))))
     )
 )
-;;dibuixa l'spirograph
-(defun spirograph (p gran petit d inc inici)
-    (cond ((= p 0) (radigran gran)(radipetit petit)(inici inici)(posicio 0 0)(cls)(mou (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici))))
-                (+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici))))))
 
-        (t (spirograph (- p 1) gran petit d inc (incrementaangle inici inc)) (pinta (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici))))
-                (+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici)))))
+;;dibuixa l'spirograph
+(defun spirograph1 (p gran petit d inc inici)
+    (cond ((= p 1) t)
+        (t (pinta (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici))))
+                (+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici))))) 
+                (spirograph1 (- p 1) gran petit d inc (incrementaangle inici inc))
                 ))
 )
 
-;; Simula el comportament d’un spirograph amb el número de voltes necessàries per acabar tot el traçat
-(defun spiro (gran petit p inc inici)
+(defun spirograph (p gran petit d inc inici)
+    (radigran gran)(radipetit petit)(inici inici)(posicio 0 0)(cls)
+    (mou (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici))))
+                (+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici)))))
+    (spirograph1 p gran petit d inc inici)
+)
 
+;; Simula el comportament d’un spirograph amb el número de voltes necessàries per acabar tot el traçat
+
+(putprop 'cercle_nou 0 'dents)
+(putprop 'cercle_nou 0 'forats)
+(putprop 'cercle_nou 0 'diametre)
+
+
+(defun cerca_petit (x y z)
+    (cond ((= y 0) nil)
+        ((= x (get (car z) 'dents)) (putprop 'cercle_nou (get (car z) 'diametre) 'diametre)
+                                            (putprop 'cercle_nou (get (car z) 'dents) 'dents)
+                                            (putprop 'cercle_nou (get (car z) 'forats) 'forats) t)
+        (t (cerca_petit x (- y 1) (cdr z))))
+)
+
+(defun cerca_cercle_petit (x)
+    (cerca_petit x 15 (get 'spiro 'petits))
+)
+
+(defun spiro (gran petit p inc inici)
+    (cerca_cercle_petit petit)
+    (spirograph (realpart (round (/ (* (* 2 pi) (car (reducir gran petit))) inc)))  
+    gran petit (* (/ (+ (get 'cercle_nou 'dents) (+ 1 (- (get 'cercle_nou 'forats) p))) (+ 1 (get 'cercle_nou 'forats))) (car (cdr (reducir gran petit)))) inc inici)
+    (print (realpart (round (/ (* (* 2 pi) (car (reducir gran petit))) inc))))
 )
 
 ;; Simulació completa del spirograph
