@@ -278,17 +278,23 @@
 
 ;; Simulació completa del spirograph
 (defun roda ()
-
+    (vermell)
+    (spiro (get 'spiro 'rgran) (get 'spiro 'rpetit) (get 'spiro 'punt) (get 'spiro 'pas) (get 'spiro 'inici))
+    (negre)
 )
 
 ;; Simulació completa del spirograph pero n voltes
 (defun roda-voltes (n)
-
+    (vermell)
+    (spiro n (get 'spiro 'rgran) (get 'spiro 'rpetit) (get 'spiro 'punt) (get 'spiro 'pas) (get 'spiro 'inici))
+    (negre)
 )
 
 ;; Simulació completa del spirograph pero n voltes i amb els paràmetres indicats
 (defun  spiro-voltes (voltes gran petit p in inici)
-
+    (vermell)
+    (spirograph voltes gran petit p in inici)
+    (negre)
 )
 
 ;; Fa totes les simulacions amb els arguments de les llistes contingudes dins la llista l
