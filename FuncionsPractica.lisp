@@ -236,10 +236,10 @@
 
 ;;dibuixa l'spirograph
 (defun spirograph1 (p gran petit d inc inici)
-    (cond ((= p 1) t)
+    (cond ((<= p 0) t)
         (t (pinta (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici))))
                 (+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici))))) 
-                (spirograph1 (- p 1) gran petit d inc (incrementaangle inici inc))
+                (spirograph1 (- p inc) gran petit d inc (incrementaangle inici inc))
                 ))
 )
 
@@ -271,7 +271,7 @@
 
 (defun spiro (gran petit p inc inici)
     (cerca_cercle_petit petit)
-    (spirograph (realpart (round (/ (* (* 2 pi) (car (reducir gran petit))) inc)))  
+    (spirograph (realpart (round (/ (* (* 2 pi) (car (cdr (reducir gran petit)))) inc)))  
     gran petit (* (/ (+ (get 'cercle_nou 'dents) (+ 1 (- (get 'cercle_nou 'forats) p))) (+ 1 (get 'cercle_nou 'forats))) (car (cdr (reducir gran petit)))) inc inici)
     (print (realpart (round (/ (* (* 2 pi) (car (reducir gran petit))) inc))))
 )
