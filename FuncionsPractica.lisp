@@ -90,7 +90,7 @@
     '(cercle1 cercle2 cercle3 cercle4 cercle5
      cercle6 cercle7 cercle8 cercle9 cercle10
      cercle11 cercle12 cercle13 cercle14 cercle15)
-    150 50 3 0 1.2 t 0 0 0.2)
+    150 50 3 0 1.8 t 0 0 0.2)
 
 ;; Colors de la tinta
 (defun vermell ()
@@ -272,7 +272,7 @@
 (defun spiro (gran petit p inc inici)
     (cerca_cercle_petit petit)
     (spirograph (realpart (round (/ (* (* 2 pi) (car (cdr (reducir gran petit)))) inc)))  
-    gran petit (* (/ (+ (get 'cercle_nou 'dents) (+ 1 (- (get 'cercle_nou 'forats) p))) (+ 1 (get 'cercle_nou 'forats))) (car (cdr (reducir gran petit)))) inc inici)
+    gran petit (/ (* (get 'cercle_nou 'dents) (+ 1 (- (get 'cercle_nou 'forats) p))) (+ 1 (get 'cercle_nou 'forats))) inc inici)
     (print (realpart (round (/ (* (* 2 pi) (car (reducir gran petit))) inc))))
 )
 
