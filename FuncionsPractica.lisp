@@ -109,6 +109,12 @@
     (color 0 0 0)
 )
 
+;;Retorna el darrer element d'una llista
+(defun darrer (L)
+    (cond ((null (cdr L)) (car L))
+    (t (darrer (cdr L))))
+)
+
 ;; Dibuixar cercle en el punt (x,y) de radi r i dividit en n segments
 ;;movem el llapiç a una posició per pintar
 (defun mou (x y)
@@ -144,17 +150,22 @@
     (cercle2 x y radi (/ 360 n) 0)
 )
 
+(defun cerclex (x y radi n)
+    (mou (+ x radi) y)
+    ;;(cercle2 x y radi (/ 360 n) 0)
+)
+
 ;; Posar r com a nou valor de radi gran i pinta un cercle en la posició per defecte
 (defun radigran (r)
     (putprop 'spiro r 'rgran)
-    (cercle (get 'spiro 'x) (get 'spiro 'y) r 100)
+    (cerclex (get 'spiro 'x) (get 'spiro 'y) r 100)
     
 )
 
 ;; Posar r com a nou valor de radi petit i pinta un cercle en la posició per defecte
 (defun radipetit (r)
     (putprop 'spiro r 'rpetit)
-    (cercle (* (- (get 'spiro 'rgran) r) (sin (radians (get 'spiro 'inici)))) (* (- (get 'spiro 'rgran) r) (cos (radians (get 'spiro 'inici)))) r 100)
+    (cerclex (* (- (get 'spiro 'rgran) r) (sin (radians (get 'spiro 'inici)))) (* (- (get 'spiro 'rgran) r) (cos (radians (get 'spiro 'inici)))) r 100)
 )
 
 ;; Establir valoras per defecte a propietats de "spiro"
@@ -168,6 +179,10 @@
 
 (defun escala (e)
     (putprop 'spiro e 'escala)
+)
+
+(defun interior (i)
+    (putprop 'spiro i 'interior)
 )
 
 (defun posicio (x y)
@@ -244,7 +259,7 @@
 )
 
 (defun spirograph (p gran petit d inc inici)
-    (radigran gran)(radipetit petit)(inici inici)(posicio 0 0)(cls)
+    (radigran gran)(radipetit petit)(inici inici)(posicio 0 0)
     (mou (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici))))
                 (+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici)))))
     (spirograph1 p gran petit d inc inici)
@@ -276,33 +291,106 @@
     (print (realpart (round (/ (* (* 2 pi) (car (reducir gran petit))) inc))))
 )
 
+(defun spiro-n (n gran petit p inc inici)
+    (cerca_cercle_petit petit)
+    (spirograph n 
+    gran petit (/ (* (get 'cercle_nou 'dents) (+ 1 (- (get 'cercle_nou 'forats) p))) (+ 1 (get 'cercle_nou 'forats))) inc inici)
+    (print (realpart (round (/ (* (* 2 pi) (car (reducir gran petit))) inc))))
+)
+
 ;; Simulació completa del spirograph
 (defun roda ()
-    (vermell)
     (spiro (get 'spiro 'rgran) (get 'spiro 'rpetit) (get 'spiro 'punt) (get 'spiro 'pas) (get 'spiro 'inici))
-    (negre)
 )
 
 ;; Simulació completa del spirograph pero n voltes
 (defun roda-voltes (n)
-    (vermell)
-    (spiro n (get 'spiro 'rgran) (get 'spiro 'rpetit) (get 'spiro 'punt) (get 'spiro 'pas) (get 'spiro 'inici))
-    (negre)
+    (spiro-n n (get 'spiro 'rgran) (get 'spiro 'rpetit) (get 'spiro 'punt) (get 'spiro 'pas) (get 'spiro 'inici))
 )
 
 ;; Simulació completa del spirograph pero n voltes i amb els paràmetres indicats
 (defun  spiro-voltes (voltes gran petit p in inici)
-    (vermell)
-    (spirograph voltes gran petit p in inici)
-    (negre)
+    (spiro-n voltes gran petit p in inici)
 )
 
 ;; Fa totes les simulacions amb els arguments de les llistes contingudes dins la llista l
 (defun spiros (l)
-
+    (set 'darrrerelement (darrer l))
+    (cond 
+    ((equal darrrerelement (car l));; 
+    (spiro (car (car l)) 
+    (car (cdr (car l))) 
+    (car (cdr (cdr (car l)))) 
+    (car (cdr (cdr (cdr (car l))))) 
+    (car (cdr (cdr (cdr (cdr (car l)))))))
+    )
+    (t (spiro (car (car l));; 
+    (car (cdr (car l))) 
+    (car (cdr (cdr (car l)))) 
+    (car (cdr (cdr (cdr (car l))))) 
+    (car (cdr (cdr (cdr (cdr (car l)))))))
+    (spiros (cdr l)))
+    )
 )
 
 ;; Pintar un joc de proves de 12 figures diferents
-(defun dibuix ()
+(defun figura11 ()
+    (cls)
+    (vermell)
+    (spiros '((105 63 1 0.5 0)
+              (105 63 3 0.5 0)
+              (105 63 5 0.5 0)))
+    (verd)
+    (spiros '((105 63 7 0.5 0)
+              (105 63 9 0.5 0)
+              (105 63 11 0.5 0)))
+    (blau)
+    (spiros '((105 63 13 0.5 0)
+              (105 63 15 0.5 0)
+              (105 63 17 0.5 0)))
+)
 
+(defun figura12 ()
+    (radigran 105)
+    (radipetit 63)
+    (inici 45)
+    (cls)
+    (vermell)
+    (punt 1)(roda)
+    (punt 3)(roda)
+    (punt 5)(roda)
+    (verd)
+    (punt 7)(roda)
+    (punt 9)(roda)
+    (punt 11)(roda)
+    (blau)
+    (punt 13)(roda)
+    (punt 15)(roda)
+    (punt 17)(roda)
+)
+
+(defun hipo ()
+    (escala 1.2)
+    (radigran 105)
+    (radipetit 40)
+    (inici 0)
+    (interior t)
+    (cls)
+    (vermell)
+    (punt 7)(roda)
+)
+
+(defun epi ()
+    (escala 0.8)
+    (radigran 150)
+    (radipetit 40)
+    (inici 0)
+    (interior nil)
+    (cls)
+    (vermell)
+    (punt 5)(roda)
+)
+
+(defun dibuix ()
+    (figura11)
 )

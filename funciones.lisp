@@ -6,6 +6,12 @@
     )
 )
 
+;;Retorna el darrer element d'una llista
+(defun darrer (L)
+    (cond ((null (cdr L)) (car L))
+    (t (darrer (cdr L))))
+)
+
 ;; Exponent x^y
 (defun exp (x y)
     (cond ((= y 0) 1)
