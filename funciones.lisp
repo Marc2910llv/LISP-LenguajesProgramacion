@@ -246,3 +246,12 @@
         (t (cons (car l) (inserta-dreta dequi que (cdr l))))
     )
 )
+
+;; Agafar l'element de la posicio indicada
+(defun agafar-n (n l)
+    (cond
+        ((null l) nil)
+        ((= n 1) (car l))
+        (t (agafar-n (- n 1) (cdr l)))
+    )
+)
