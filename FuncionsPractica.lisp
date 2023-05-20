@@ -254,16 +254,18 @@
 ;;dibuixa l'spirograph
 (defun spirograph1 (p gran petit d inc inici)
     (cond ((<= p 0) t)
-        (t (pinta (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici))))
-                (+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici))))) 
+        (t (pinta (+ (get 'spiro 'x) (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici)))))
+                (+ (get 'spiro 'y)(+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici)))))
+                ) 
                 (spirograph1 (- p inc) gran petit d inc (incrementaangle inici inc))
                 ))
 )
 
 (defun spirograph (p gran petit d inc inici)
-    (radigran gran)(radipetit petit)(inici inici)(posicio 0 0)
-    (mou (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici))))
-                (+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici)))))
+    (radigran gran)(radipetit petit)(inici inici)
+    (mou (+ (get 'spiro 'x) (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici)))))
+                (+ (get 'spiro 'y) (+ (* (* -1 (funcio910x inici d)) (sin (get 'spiro 'inici))) (* (funcio910y inici d) (cos (get 'spiro 'inici)))))
+                )
     (spirograph1 p gran petit d inc inici)
 )
 
@@ -324,7 +326,6 @@
 
 ;; Pintar un joc de proves de 12 figures diferents
 (defun figura11 ()
-    (cls)
     (vermell)
     (spiros '((105 63 1 0.5 0)
               (105 63 3 0.5 0)
@@ -343,7 +344,6 @@
     (radigran 105)
     (radipetit 63)
     (inici 45)
-    (cls)
     (vermell)
     (punt 1)(roda)
     (punt 3)(roda)
@@ -364,7 +364,6 @@
     (radipetit 40)
     (inici 0)
     (interior t)
-    (cls)
     (vermell)
     (punt 7)(roda)
 )
@@ -375,11 +374,13 @@
     (radipetit 40)
     (inici 0)
     (interior nil)
-    (cls)
     (vermell)
     (punt 5)(roda)
 )
 
 (defun dibuix ()
     (figura11)
+    (posicio 100 0) ;;has de jugar amb sa posició i s'escala de cada figura
+    (figura12)
+    
 )
