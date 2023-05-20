@@ -5,6 +5,8 @@
 ;;cada anell gran tendrà dues propietats : interiors i exteriors.
 ;;cada anell petit tendrà 3 propietats: dents, forats i diàmetre.
 
+(load 'funciones.lisp)
+
 (putprop 'anell1 150 'exteriors)
 (putprop 'anell1 105 'interiors)
 (putprop 'anell2 144 'exteriors)
@@ -288,14 +290,13 @@
     (cerca_cercle_petit petit)
     (spirograph (realpart (round (/ (* (* 2 pi) (car (cdr (reducir gran petit)))) inc)))  
     gran petit (/ (* (get 'cercle_nou 'dents) (+ 1 (- (get 'cercle_nou 'forats) p))) (+ 1 (get 'cercle_nou 'forats))) inc inici)
-    (print (realpart (round (/ (* (* 2 pi) (car (reducir gran petit))) inc))))
+
 )
 
 (defun spiro-n (n gran petit p inc inici)
     (cerca_cercle_petit petit)
     (spirograph n 
     gran petit (/ (* (get 'cercle_nou 'dents) (+ 1 (- (get 'cercle_nou 'forats) p))) (+ 1 (get 'cercle_nou 'forats))) inc inici)
-    (print (realpart (round (/ (* (* 2 pi) (car (reducir gran petit))) inc))))
 )
 
 ;; Simulació completa del spirograph
@@ -314,22 +315,10 @@
 )
 
 ;; Fa totes les simulacions amb els arguments de les llistes contingudes dins la llista l
-(defun spiros (l)
-    (set 'darrrerelement (darrer l))
-    (cond 
-    ((equal darrrerelement (car l));; 
-    (spiro (car (car l)) 
-    (car (cdr (car l))) 
-    (car (cdr (cdr (car l)))) 
-    (car (cdr (cdr (cdr (car l))))) 
-    (car (cdr (cdr (cdr (cdr (car l)))))))
-    )
-    (t (spiro (car (car l));; 
-    (car (cdr (car l))) 
-    (car (cdr (cdr (car l)))) 
-    (car (cdr (cdr (cdr (car l))))) 
-    (car (cdr (cdr (cdr (cdr (car l)))))))
-    (spiros (cdr l)))
+
+(defun spiros (L)
+    (cond ((eq (cdr L) nil) (spiro (agafar-n 1 (car L)) (agafar-n 2 (car L)) (agafar-n 3 (car L)) (agafar-n 4 (car L)) (agafar-n 5 (car L))))
+    (t (spiro (agafar-n 1 (car L)) (agafar-n 2 (car L)) (agafar-n 3 (car L)) (agafar-n 4 (car L)) (agafar-n 5 (car L))) (spiros (cdr L)))
     )
 )
 
@@ -366,7 +355,7 @@
     (blau)
     (punt 13)(roda)
     (punt 15)(roda)
-    (punt 17)(roda)
+    (punt 17)(roda) 
 )
 
 (defun hipo ()
