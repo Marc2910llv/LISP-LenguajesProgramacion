@@ -255,3 +255,11 @@
         (t (agafar-n (- n 1) (cdr l)))
     )
 )
+
+(defun borrarxl (x l)
+        (cond   ((null l) nil)
+                ((listp (car l)) (cons (borrarxl x (car l)) (borrarxl x (cdr l))))
+                ((equal x (car l)) (borrarxl x (cdr l)))
+                (t (cons (car l) (borrarxl x (cdr l))))
+        )
+)
