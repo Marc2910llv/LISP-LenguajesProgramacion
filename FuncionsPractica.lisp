@@ -195,18 +195,21 @@
 ;; Calcular la fracció reduïda de m i n i retorna una llista amb els dos valors de la nova fracció
 
 ;;primer necessitam quatre funcions adicionals, darrer, divisible, conjunt i divisor_comú
-;;no fa falta tot això, ja hi ha una funció mcd definida dins lisp
+;;Aquestes funcionalitats no son necessàries, ja que LISP ja incorpora una funció reducir. Però com que ja 
+;;ho teniem fet antes de saber això ho deixarem així.
 (defun darrer (I) (car (reverse I)))
 
 (defun divisible (x y)
     (cond ((eq (mod x y) 0) t)
         (t nil)))
 
+;;Funció que li passam un nombre, per exempe 5, i un 1, i treim una llista de tots els nombres divisibles per el 5
 (defun conjunt (x y)
     (cond ((eq x y) (list x))
         ((divisible x y) (append (list y) (conjunt x (+ y 1))))
         (t (conjunt x (+ y 1)))))
 
+;;Funció que donats dos conjunts de nombres, treu una llista amb els nombres que es troben a les dues llistes
 (defun divisor_comu (m n)
     (cond ((null (car m)) nil)
         ((eq (member (car m) n) nil) (divisor_comu (cdr m) n))
@@ -214,6 +217,7 @@
 
 ;;funció definitiva
 
+;;amb la funció divisor comú hem tret la llista de divisors comuns als dos nombres, agafarem el màxim d'aquesta llista
 (defun reducir (x y)
     (append (list (/ x (darrer (divisor_comu (conjunt x 1) (conjunt y 1)))))
             (list (/ y (darrer (divisor_comu (conjunt x 1) (conjunt y 1)))))
@@ -252,6 +256,10 @@
 )
 
 ;;dibuixa l'spirograph
+;;a pinta li passam una posició x i y. El que feim a x i a y primer es sumar la posició d'inici que
+;;es troba a 'spiro 'x i 'spiro 'y respectivament.
+;; Aquesta suma es farà sobre la posició calculada per les funcions funcio910x i funcio910y
+
 (defun spirograph1 (p gran petit d inc inici)
     (cond ((<= p 0) t)
         (t (pinta (+ (get 'spiro 'x) (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici)))))
@@ -261,6 +269,8 @@
                 ))
 )
 
+;;Primer ens movem a la posició d'inici donta l'angle d'inici i la d
+;;A l'spiro guardam el radigran, radipetit i l'angle d'inici
 (defun spirograph (p gran petit d inc inici)
     (radigran gran)(radipetit petit)(inici inici)
     (mou (+ (get 'spiro 'x) (+ (* (funcio910x inici d) (cos (get 'spiro 'inici))) (* (funcio910y inici d) (sin (get 'spiro 'inici)))))
@@ -275,7 +285,10 @@
 (putprop 'cercle_nou 0 'forats)
 (putprop 'cercle_nou 0 'diametre)
 
-
+;;Funció on li passam a x el número de dents de el cercle petit, a y el total de cercles diferents que hi ha (15)
+    ;;i a z la llista dels cercles petits
+;; El que fa bàsicament és verificar que el número de dents que li hem passat es troba dins la llista de cercles i, per tant,
+;; aquest nombre és vàlid
 (defun cerca_petit (x y z)
     (cond ((= y 0) nil)
         ((= x (get (car z) 'dents)) (putprop 'cercle_nou (get (car z) 'diametre) 'diametre)
@@ -284,14 +297,39 @@
         (t (cerca_petit x (- y 1) (cdr z))))
 )
 
+;;Antes de mirar la funció spiro, ens hem de assegurar que els paràmetres gran i petit que es passaràn son correctes
+;; cerca_cercle_gran i cerca_cercle_petit s'encarreguen d'això, retornen true si petit i gran son correctes i false d'altra banda
 (defun cerca_cercle_petit (x)
     (cerca_petit x 15 (get 'spiro 'petits))
 )
 
+(defun cerca_gran_fora (x z)
+    (cond ((= x (get (car z) 'exteriors)) t)
+        ((= x (get (cadr z) 'exteriors)) t)
+        (t nil))
+    )
+
+
+(defun cerca_gran_dins (x z)
+    (cond ((= x (get (car z) 'interiors)) t)
+        ((= x (get (cadr z) 'interiors)) t)
+        (t nil))
+    )
+
+(defun cerca_cercle_gran (x)
+(cond ((eq (get 'spiro 'interior) t) (cerca_gran_dins x (get 'spiro 'grans)))
+    (t (cerca_gran_fora x (get 'spiro 'grans) )))
+)
+
+;;Si petit i gran és vàlid és vàlid, si no, retornam false
+;; calculam el nombre de passes que haurem de fer perquè el spirograph sigui complet
+;; també calculam la t que passam a spirograph amb la p que passam per paràmetre
 (defun spiro (gran petit p inc inici)
-    (cerca_cercle_petit petit)
+    (cond ((and (eq (cerca_cercle_gran gran) t) (eq (cerca_cercle_petit petit) t))
     (spirograph (realpart (round (/ (* (* 2 pi) (car (cdr (reducir gran petit)))) inc)))  
-    gran petit (/ (* (get 'cercle_nou 'dents) (+ 1 (- (get 'cercle_nou 'forats) p))) (+ 1 (get 'cercle_nou 'forats))) inc inici)
+    gran petit (/ (* (get 'cercle_nou 'dents) (+ 1 (- (get 'cercle_nou 'forats) p))) (+ 1 (get 'cercle_nou 'forats))) inc inici))
+    (t nil)
+    )
 
 )
 
