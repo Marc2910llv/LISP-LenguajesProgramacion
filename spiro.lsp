@@ -1,3 +1,6 @@
+;; Marc Llobera Villalonga
+;; Pere Joan Vives Morey
+
 ;; FUNCIONS
 
 ;; Guardar dins les propietats d'un àtom simbòlic "spiro" informació per inicialitzar el nostre spirograph
