@@ -5,7 +5,15 @@
 ;;cada anell gran tendrà dues propietats : interiors i exteriors.
 ;;cada anell petit tendrà 3 propietats: dents, forats i diàmetre.
 
-(load 'funciones.lisp)
+;; FUNCIÓ AUXILIAR
+;; Agafar l'element de la posicio indicada
+(defun agafar-n (n l)
+    (cond
+        ((null l) nil)
+        ((= n 1) (car l))
+        (t (agafar-n (- n 1) (cdr l)))
+    )
+)
 
 (putprop 'anell1 150 'exteriors)
 (putprop 'anell1 105 'interiors)
@@ -535,6 +543,8 @@
 )
 
 (defun dibuix ()
+    (cls)
+
     (posicio -300 215) 
     (escala 0.6)
     (figura1)
